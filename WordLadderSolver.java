@@ -35,23 +35,26 @@ public class WordLadderSolver implements Assignment4Interface
 		}
     
 		dictionaryMatrix = new boolean[originalWordListSize][originalWordListSize];
+		
 		Long start = System.nanoTime();
+		
 		for (ArrayList<String> list : originalWordList.values()) 
 		{
 			for (String word1 : list)
 			{
 				for(String word2 : list)
 				{
-					if(isNeighbor(word1,word2))
+					if(checkNextTo(word1,word2))
 					{
 						addEdge(list.indexOf(word1),list.indexOf(word2));
 					}
 				}
 			}
 		}
+		
 		Long stop = System.nanoTime();
 		double time = ((double)stop - (double)start)/1000000;
-		System.out.println("Execution time for creating the graph is: " + time + " ms");
+		System.out.println("Graph execution time: " + time + " ms");
 	}
     
     // do not change signature of the method implemented from the interface
@@ -69,4 +72,29 @@ public class WordLadderSolver implements Assignment4Interface
     }
 
     // add additional methods here
+    boolean checkEdge(int p, int q) 
+    {
+        return dictionaryMatrix[p][q];
+    }
+    void addEdge(int p, int q) 
+	{
+        dictionaryMatrix[p][q] = true;
+    }
+	void removeEdge(int p, int q) 
+	{
+        dictionaryMatrix[p][q] = false;
+    }
+    
+    public static boolean checkNextTo(String a, String b) 
+    {
+        assert a.length() == b.length();
+        int differ = 0;
+        for (int i = 0; i < a.length(); i++) 
+        {
+            if (a.charAt(i) != b.charAt(i)) differ++;
+            if (differ > 1) return false;
+        }
+        return true;
+    }
+    
 }
